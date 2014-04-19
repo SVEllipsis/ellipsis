@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title><%= "#{@page[:title]} - " unless @page[:title].empty? %>Ellipsis</title>
+  <meta name="description" content="BOAT">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="stylesheet" href="/css/vendor/normalize.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div class="wrapper">
+    <nav class="sidebar">
+      <div class="sidebar__title">Ellipsis</div>
+      <ul class="sidebar__links">
+        <li data-nav-view="weather" class="<%='active' if request.path_info.match /^\/weather/ %>"><a href="/weather">Weather</a></li>
+        <li data-nav-view="orientation" class="<%='active' if request.path_info.match /^\/orientation/ %>"><a href="/orientation">Orientation</a></li>
+      </ul>
+    </nav>
+
+    <div class="main">
+      <%= yield %>
+    </div>
+  </div>
+
+  <!--
+  <script src="/js/vendor/jquery-1.11.0.min.js"></script>
+  <script src="/js/main.js"></script>
+  -->
+</body>
+</html>
