@@ -6,7 +6,6 @@ Dir[File.join(File.dirname(__FILE__), "initializers/*.rb")].each do |file|
   require file
 end
 
-
 #params for serial port
 port_str = "/dev/tty.usbmodemfd121"  #may be different for you
 baud_rate = 115200
@@ -28,7 +27,7 @@ end
 sp = SerialPort.new(port_str, baud_rate, data_bits, stop_bits, parity)
 puts "Opening serial to NMEA bus"
 
-t1 = Time.now()
+sync_timer = Time.now()
 
 while(true) do
   message = sp.gets
@@ -36,9 +35,7 @@ while(true) do
 
   Nmea.parse(message)
 
-  t2 = Time.now()
-
-  if ((t2 - t1) > 300)
+  if ((Time.now() - sync_timer) > 300)
     Nmea.sync
     t1 = Time.now()
   end
