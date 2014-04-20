@@ -14,28 +14,35 @@ data_bits = 8
 stop_bits = 1
 parity = SerialPort::NONE
 
-if File.exist?(port_str)
+if !File.exist?(port_str)
 
-  sp = SerialPort.new(port_str, baud_rate, data_bits, stop_bits, parity)
+  puts "No Arduino Connected"
 
-  while(true) do
-    message = sp.gets
-    message.chomp!
-
-    split = message.split('=')
-
-    puts message
-
-    Nmea.set(split[0],split[1])
-  end
-
-  sp.close
-
-else
-
-  while(true) do
-    puts "No Arduino Connected"
-    sleep(1000)
+  while(!File.exist?(port_str)) do
+    sleep(30)
+    true
   end
 
 end
+
+sp = SerialPort.new(port_str, baud_rate, data_bits, stop_bits, parity)
+puts "Opening serial to NMEA bus"
+
+t1 = Time.now()
+
+while(true) do
+  message = sp.gets
+  message.chomp!
+
+  Nmea.parse(message)
+
+  t2 = Time.now()
+
+  if ((t2 - t1) > 300)
+    Nmea.sync
+    t1 = Time.now()
+  end
+
+end
+
+sp.close
