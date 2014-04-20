@@ -6,8 +6,7 @@ DataMapper.setup(:default, {
   username: 'root',
   password: '',
   host: 'localhost',
-  port: 3306,
-  socket: '/opt/boxen/data/mysql/socket'
+  port: 3306
 })
 
 Dir[File.join(File.dirname(__FILE__), "../models/*.rb")].each do |file|
