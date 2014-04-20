@@ -1,0 +1,9 @@
+Data as of: <%=@data_latest.created_at %>
+<% @partials.each do |partial| %>
+  <%= erb partial %>
+<% end %>
+
+<h3>Raw data</h3>
+<p><strong>Data:</strong> <%=@data.map{|item| item.attributes}.inspect%></p>
+
+<p><strong>Latest:</strong> <%=@data_latest.attributes%>
