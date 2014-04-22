@@ -23,20 +23,23 @@ class App < Sinatra::Application
   end
 
   get '/?' do
-   # These parameters come from the query string
-    params[:start_time] ||= nil
-    params[:end_time] ||= nil
-    params[:resolution] ||= nil
+    # These parameters come from the query string
+    # TODO Validate user input
+
+    params[:resolution] = params[:resolution].to_i || 60
+    params[:limit] = params[:limit].to_i || 10
+
 
     @page = {:title => 'Dashboard'}
 
-    # Commented out duration as we're currently working on with demo data
     @data = get_data({
-      # start_time => start_time || Time.now - 60*60*3 # Three hours ago
-      # end_time = end_time || Time.now
+      :resolution => params[:resolution],
+      :limit => params[:limit],
     })
 
-    @data_latest = @data[1]
+    @limit = params[:limit]
+    @resolution = params[:resolution]
+    @refreshed_at = DateTime.now
 
     @partials = [
       :'dashboard/geodata',
@@ -49,10 +52,11 @@ class App < Sinatra::Application
   # Hot pants! It's named capture groups in regexp
   get %r{^/data(?:\.(?<format>json))?$} do
     # These parameters come from the query string
-    params[:start_time] ||= nil
-    params[:end_time] ||= nil
+    params[:start] ||= nil
+    params[:end] ||= nil
     params[:fields] ||= nil
-    params[:resolution] ||= nil
+    params[:resolution] = params[:resolution].to_i || 60
+    params[:limit] = params[:limit].to_i || 10
 
     #TODO Implement page / limit parameters
 
@@ -60,9 +64,10 @@ class App < Sinatra::Application
     # Make sure that only the requested fields are returned in the dataset
 
     data = get_data({
-      :start_time => (params[:start_time] ? Time.parse(params[:start_time]) : nil),
-      :end_time =>  (params[:end_time] ? Time.parse(params[:end_time]) : nil),
+      :start => (params[:start] ? DateTime.parse(params[:start]) : nil),
+      :end =>  (params[:end] ? DateTime.parse(params[:end]) : nil),
       :fields => (params[:fields] ? params[:fields].split(',') : nil),
+      :limit => params[:limit],
     })
 
     return json({:count => data.length, :data => data}) if params[:format] == 'json'
@@ -75,10 +80,11 @@ class App < Sinatra::Application
     # http://stackoverflow.com/questions/10403039/mysql-select-query-5-minute-increment
 
     opts = {
-      :start_time => nil,
-      :end_time => nil,
+      :start => nil,
+      :end => nil,
       :fields => nil,
       :resolution => nil,
+      :limit => nil,
     }.merge(opts)
 
 
@@ -87,8 +93,9 @@ class App < Sinatra::Application
     }
 
     parameters[:fields] = opts[:fields] if opts[:fields]
-    parameters[:created_at.gt] = opts[:start_time] if opts[:start_time]
-    parameters[:created_at.lt] = opts[:end_time] if opts[:end_time]
+    parameters[:created_at.gt] = opts[:start] if opts[:start]
+    parameters[:created_at.lt] = opts[:end] if opts[:end]
+    parameters[:limit] = opts[:limit] if opts[:limit]
 
     Nmea.all(parameters)
   end

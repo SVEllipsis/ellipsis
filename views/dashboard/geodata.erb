@@ -1,15 +1,24 @@
-<article id="geodata">
-  <h1>Geodata</h1>
+<article id="geodata" class="dashboard">
+  <h1 class="dashboard__heading">Geodata</h1>
 
-  <ul>
-    <li>
-      GPS Location: <%=@data_latest.lat%> / <%=@data_latest.long%>
-    </li>
-    <li>
-      Speed: <%=@data_latest.speed%> Knots
-    </li>
-    <li>
-      Bearing: <%=@data_latest.bearing%>&deg;
-    </li>
-  </ul>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Location (Lat,&nbsp;Long)</th>
+        <th class="td--right">Bearing</th>
+        <th class="td--right">Speed (Knots)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @data.each do |row| %>
+        <tr>
+          <td><%=row.created_at.strftime('%Y-%m-%d %H:%M:%S')%></td>
+          <td><%=row.lat%>, <%=row.long%></td>
+          <td class="td--right"><%=row.bearing%>&deg;</td>
+          <td class="td--right"><%=row.speed%></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </article>

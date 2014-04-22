@@ -1,15 +1,26 @@
-<article id="weather">
-  <h1>Weather</h1>
+<article id="weather" class="dashboard">
+  <h1 class="dashboard__heading">Weather</h1>
 
-  <ul>
-    <li>
-      Wind: <%=@data_latest.windspeed%> Knots bearing <%=@data_latest.winddir%>&deg;
-    </li>
-    <li>
-      Water Temperature: <%=@data_latest.watertemp%> Knots
-    </li>
-    <li>
-      Water Speed: <%=@data_latest.waterspeed%>
-    </li>
-  </ul>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th class="td--right">Wind Bearing</th>
+        <th class="td--right">Wind Speed (Knots)</th>
+        <th class="td--right">Water Speed (Knots)</th>
+        <th class="td--right">Water Temperature (&deg;C)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @data.each do |row| %>
+        <tr>
+          <td><%=row.created_at.strftime('%Y-%m-%d %H:%M:%S')%></td>
+          <td class="td--right"><%=row.winddir%>&deg;</td>
+          <td class="td--right"><%=row.windspeed%></td>
+          <td class="td--right"><%=row.waterspeed%></td>
+          <td class="td--right"><%=row.watertemp%></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </article>

@@ -1,9 +1,30 @@
-Data as of: <%=@data_latest.created_at %>
-<% @partials.each do |partial| %>
-  <%= erb partial %>
+<form action="?" method="get" class="filters">
+  <label for="limit">Last
+    <select name="limit" id="limit">
+      <option <%='selected' if @limit == 10%>>10</option>
+      <option <%='selected' if @limit == 20%>>20</option>
+    </select>
+    items
+  </label>
+  at a
+  <label for="resolution">resolution of one item every
+    <select name="resolution" id="resolution">
+      <option value="60" <%='selected' if @resolution == 60%>>1 minute</option>
+    </select>
+  </label>
+
+  <input type="submit" value="Update">
+</form>
+
+<%# TODO JS so this is relative time (e.g. "Last updated 2 mins ago")%>
+<div class="last-updated">
+  Last updated: <span class="refresh_at" title="<%=@refreshed_at.strftime('%Y-%m-%d %H:%M:%S') %>"><%=@refreshed_at.strftime('%Y-%m-%d %H:%M:%S')%></span>
+</div>
+
+<% if @data.length > 0 %>
+  <% @partials.each do |partial| %>
+    <%= erb partial %>
+  <% end %>
+<% else %>
+  <div class="error">No data available for this timeframe</div>
 <% end %>
-
-<h3>Raw data</h3>
-<p><strong>Data:</strong> <%=@data.map{|item| item.attributes}.inspect%></p>
-
-<p><strong>Latest:</strong> <%=@data_latest.attributes%>
