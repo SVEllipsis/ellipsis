@@ -108,3 +108,11 @@ h1, h2, .sidebar__title {
 .td--right {
   text-align:right;
 }
+
+/* Map */
+.map__info {
+  /*width: 240px;*/
+}
+.map__info__coordinates {
+  white-space:nowrap;
+}

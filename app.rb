@@ -49,6 +49,18 @@ class App < Sinatra::Application
     erb :dashboard
   end
 
+  get '/map' do
+    # Disable if on boat
+    return pass if settings.afloat
+
+    @page = {:title => 'Map'}
+
+    @gmaps_api_key = 'AIzaSyBluOcHbET3xs4QBRfzGtA5pC9rS6my5V8'
+    @json_params = ''
+
+    erb :map
+  end
+
   # Hot pants! It's named capture groups in regexp
   get %r{^/data(?:\.(?<format>json))?$} do
     # These parameters come from the query string

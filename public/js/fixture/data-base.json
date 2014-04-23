@@ -1,0 +1,11 @@
+{
+  "data": [
+    { "lat": 50.3714, "long": -4.1422, "bearing": 70, "created_at": "2014-04-10T10:00" },
+    { "lat": 51.8972, "long": -8.4700, "bearing": 80, "created_at": "2014-04-12T11:00" },
+    { "lat": 43.3650, "long": -8.4100, "bearing": 40, "created_at": "2014-04-13T12:00" },
+    { "lat": 36.7194, "long": -4.4200, "bearing": 30, "created_at": "2014-04-14T13:00" },
+    { "lat": 41.3833, "long": 2.1833, "bearing": 180, "created_at": "2014-04-15T14:00" },
+    { "lat": 43.7166, "long": 10.4000, "bearing": 120, "created_at": "2014-04-16T15:00" },
+    { "lat": 40.8333, "long": 14.2500, "bearing": 90, "created_at": "2014-04-17T16:00" }
+  ]
+}
