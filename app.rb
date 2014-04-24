@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'sinatra'
+require "sinatra/content_for"
 require "sinatra/json"
 
 #Reloader
@@ -9,6 +10,8 @@ require './lib/sinatra-reloader'
 
 class App < Sinatra::Application
   set :afloat, !!ENV['AFLOAT'] || false
+
+  helpers Sinatra::ContentFor
 
   configure do
     use Rack::Deflater
