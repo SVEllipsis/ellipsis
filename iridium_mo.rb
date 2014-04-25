@@ -4,9 +4,20 @@ Dir[File.join(File.dirname(__FILE__), "initializers/*.rb")].each do |file|
 end
 
 nmea = Nmea.last()
+weather = Weather.last()
 
+values = Array.new
 
+values << nmea['lat']
+values << nmea['long']
+values << nmea['bearing']
+values << nmea['speed']
+values << nmea['waterspeed']
+values << weather['temp_out']
+values << nmea['windspeed']
+values << nmea['winddir']
+values << nmea['rel_pressure']
 
+message = values.join(',')
 
-# 5133.82N,00042.24W,173.8,99.8,30,99.8N,1,ABC
-# LAT,LONG,SPEED,COURSE,TEMP,WIND,POWER,DEST
+REDIS.publish("mo", message)
