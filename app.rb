@@ -115,4 +115,22 @@ class App < Sinatra::Application
     Nmea.all(parameters)
   end
 
+  # Messaging
+  get '/messages' do
+
+    @page = {:title => 'Messages'}
+
+    @messages = Messages.all(
+      :order => [ :created_at.desc ],
+      :limit => 20
+    )
+
+    erb :messages
+  end
+
+  post '/messages' do
+    Messages.send_message(params['message'])
+    redirect '/messages'
+  end
+
 end
