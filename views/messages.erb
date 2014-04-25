@@ -1,0 +1,19 @@
+<form name="send" action="/messages" method="post">
+<h4>Message:</h4>
+<input type="text" name="message" maxlength="55" size="55">
+<input type="submit" value="Submit">
+<p>Messages are charged at 12p per 55 characters</p>
+</form>
+
+<hr>
+
+
+<% @messages.each do |message|  %>
+  <% if message.type == 'mt' %>
+    <h4><%= message.created_at.strftime("Recieved at %T %d/%m/%Y") %></h4>
+  <% else %>
+    <h4><%= message.created_at.strftime("Sent at %T %d/%m/%Y") %></h4>
+  <% end %>
+  <p><%= message.text %></p>
+  <hr>
+<% end %>
