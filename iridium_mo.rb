@@ -20,4 +20,4 @@ values << nmea['rel_pressure']
 
 message = values.join(',')
 
-REDIS.publish("mo", message)
+Messages.send_message(message)
