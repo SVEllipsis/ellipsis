@@ -5,7 +5,7 @@ Dir[File.join(File.dirname(__FILE__), "initializers/*.rb")].each do |file|
   require file
 end
 
-data = JSON.parse(File.read("examples/weather.json"))
+data = JSON.parse(File.read("/home/pi/weather/output/latest.json"))
 
 Weather.create(
   'temp_out' => data['temp_out'],
