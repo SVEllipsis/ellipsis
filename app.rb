@@ -98,10 +98,15 @@ class App < Sinatra::Application
         reduced_item
       }
     end
+    json_string = json({:count => data.length, :data => data})
 
-    return json({:count => data.length, :data => data}) if params[:format] == 'json'
+    # return jsonp if callback parameter is added
+    if params[:callback]
+      json_string = "#{params[:callback]}(#{(json_string)});"
+    end
+
+    json_string
     # TODO setup CORS headers so this can be accessed by anybody
-    # TODO return jsonp?
   end
 
   def get_data(opts={})

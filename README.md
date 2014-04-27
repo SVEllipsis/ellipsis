@@ -70,3 +70,12 @@ Return the last 20 results:
 
 Return results 21-40:
     [/data.json?limit=20&page=2](http://live.ellipsis.voyage/data.json?limit=20&page=2).
+
+### JSONP
+
+The `callback` parameter shall wrap the JSON data in a within a call to the
+JavaScript function named.
+
+Return the data to a function called 'getdata':
+    [/data.json?callback=getdata](http://live.ellipsis.voyage/data.json?callback=getdata).
+
