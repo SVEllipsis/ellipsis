@@ -72,24 +72,45 @@ class App < Sinatra::Application
     params[:fields] ||= nil
     params[:resolution] = params[:resolution].to_i || 60
     params[:limit] = params[:limit].to_i || 10
+    params[:page] = params[:page].to_i || 1
 
-    #TODO Implement page / limit parameters
-
-    # TODO fields are lazy loaded so they end up being populated anyway.
-    # Make sure that only the requested fields are returned in the dataset
+    fields = (params[:fields] ? params[:fields].split(',') : nil)
 
     data = get_data({
       :start => (params[:start] ? DateTime.parse(params[:start]) : nil),
       :end =>  (params[:end] ? DateTime.parse(params[:end]) : nil),
-      :fields => (params[:fields] ? params[:fields].split(',') : nil),
+      :fields => fields,
       :limit => params[:limit],
+      :page => params[:page],
     })
 
-    return json({:count => data.length, :data => data}) if params[:format] == 'json'
-    #TODO return jsonp?
+    # Datamapper fields are lazy loaded so they end up being populated anyway if
+    # we return data immediately.
+    # Make sure that only the requested fields are returned in the dataset by
+    # building our own hash.
+    if fields
+      data = data.map {|item|
+        reduced_item = {}
+        fields.each {|field|
+          reduced_item[field] = item[field]
+        }
+
+        reduced_item
+      }
+    end
+    json_string = json({:count => data.length, :data => data})
+
+    # return jsonp if callback parameter is added
+    if params[:callback]
+      json_string = "#{params[:callback]}(#{(json_string)});"
+    end
+
+    json_string
+    # TODO setup CORS headers so this can be accessed by anybody
   end
 
   def get_data(opts={})
+    # TODO allow customising order data is returned
     # TODO resolution option for limiting amount of datapoints
     # datapoint every (1min / 5min / 30min) etc
     # http://stackoverflow.com/questions/10403039/mysql-select-query-5-minute-increment
@@ -99,9 +120,9 @@ class App < Sinatra::Application
       :end => nil,
       :fields => nil,
       :resolution => nil,
-      :limit => nil,
+      :limit => 0,
+      :page => 1,
     }.merge(opts)
-
 
     parameters ={
       :order => [ :created_at.desc ]
@@ -110,7 +131,8 @@ class App < Sinatra::Application
     parameters[:fields] = opts[:fields] if opts[:fields]
     parameters[:created_at.gt] = opts[:start] if opts[:start]
     parameters[:created_at.lt] = opts[:end] if opts[:end]
-    parameters[:limit] = opts[:limit] if opts[:limit]
+    parameters[:limit] = opts[:limit] if opts[:limit] != 0
+    parameters[:offset] = (opts[:page] -1) * opts[:limit] if opts[:page] > 1 && opts[:limit] != 0
 
     Nmea.all(parameters)
   end
