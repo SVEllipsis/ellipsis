@@ -7,7 +7,7 @@ Dir[File.join(File.dirname(__FILE__), "initializers/*.rb")].each do |file|
 end
 
 #params for serial port
-port_str = "/dev/tty.usbmodemfd121"  #may be different for you
+port_str = "/dev/ttyACM0"  #may be different for you
 baud_rate = 115200
 data_bits = 8
 stop_bits = 1
