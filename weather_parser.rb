@@ -13,6 +13,7 @@ Weather.create(
   'temp_appr' => data['temp_appr'],
   'wind_avg' => data['wind_avg'],
   'wind_gust' => data['wind_gust'],
+  'wind_dir' => data['wind_dir'],
   'hum_out' => data['hum_out'],
   'hum_in' => data['hum_in'],
   'rain' => data['rain'],

@@ -7,6 +7,7 @@ class Weather
   property :temp_appr, Float
   property :wind_avg, Float
   property :wind_gust, Float
+  property :wind_dir, String
   property :hum_out, Float
   property :hum_in, Float
   property :rain, Float

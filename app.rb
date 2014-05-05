@@ -145,7 +145,7 @@ class App < Sinatra::Application
 
     @messages = Messages.all(
       :order => [ :created_at.desc ],
-      :limit => 20
+      :limit => 50
     )
 
     erb :messages
