@@ -20,49 +20,25 @@ class Nmea
     REDIS.hget 'nmea', key
   end
 
-  def self.sync
-    keys = REDIS.hgetall 'nmea'
-
-    self.create(
-      :lat => keys['LATA'],
-      :long => keys['LONG'],
-      :speed => keys['KNOT'],
-      :bearing => keys['BEAR'],
-      :winddir => keys['WIND'],
-      :windspeed => keys['WINS'],
-      :waterspeed => keys['WATS'],
-      :watertemp => keys['WATT'],
+  def self.parse(data)
+    puts self.create(
+      :lat => clean(data[0]),
+      :long => clean(data[1]),
+      :speed => clean(data[4]),
+      :bearing => clean(data[5]),
+      :winddir => clean(data[8]),
+      :windspeed => clean(data[9]),
+      :waterspeed => clean(data[7]),
+      :watertemp => clean(data[6]),
       :created_at => Time.now()
-    )
-
+    ).inspect
   end
 
-  def self.parse(msg)
-    if valid_message?(msg)
-      kv = msg.split("=")
-      self.set(kv[0], kv[1])
-    end
-  end
 
-  private
-
-  def self.valid_message?(msg)
-    /[A-Z][A-Z][A-Z][A-Z]=/.match(msg)
-  end
-
-  def valid_values
-    {
-      'LATA' => 'latitude',
-      'LONG' => 'longitude',
-      'DATE' => 'date',
-      'TIME' => 'time',
-      'KNOT' => 'speed in knots',
-      'BEAR' => 'direction of travel',
-      'WIND' => 'wind direction',
-      'WINS' => 'wind speed',
-      'WATT' => 'water temperature',
-      'WATS' => 'water speed'
-    }
+  def self.clean(val)
+    return nil unless val.match("[0-9].")
+    return nil if val.empty?
+    val
   end
 
 end

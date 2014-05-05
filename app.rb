@@ -26,6 +26,7 @@ class App < Sinatra::Application
   end
 
   get '/?' do
+
     # These parameters come from the query string
     # TODO Validate user input
 
