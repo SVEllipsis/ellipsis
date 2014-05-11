@@ -3,7 +3,7 @@ window.ellipsisMap = (function(){
 
   var ellipsisMap = function(mapElem) {
     this.getData().done($.proxy(function(json){
-      this.data = json.data;
+      this.data = json;
 
       // TODO Guess initial center and zoom mased on data set
       this.map = new google.maps.Map(mapElem, {
@@ -18,7 +18,7 @@ window.ellipsisMap = (function(){
 
   ellipsisMap.prototype = {
     getData: function() {
-      return $.ajax('/js/fixture/data-base.json');
+      return $.ajax('/map.json');
     },
 
     addMarkers: function() {

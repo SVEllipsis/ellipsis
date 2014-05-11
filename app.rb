@@ -62,13 +62,20 @@ class App < Sinatra::Application
 
     @page = {:title => 'Map'}
 
-    @gmaps_api_key = 'AIzaSyCN6TZJCABZRmN54lwwf6Mt0j7Ot6ABf74'
+    @gmaps_api_key = 'AIzaSyCutm8yU9R_oPItTgnNq1GtuP-3tX7h91M'
     @json_params = ''
 
     @nmea = Nmea.last();
     @weather = Weather.last();
 
     erb :map
+  end
+
+  get '/map.json' do
+    #Might want to cache this at some point
+    pings = Nmea.all(:order => [:id.asc])
+    content_type :json
+    pings.to_json
   end
 
   # Hot pants! It's named capture groups in regexp
