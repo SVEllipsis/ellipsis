@@ -16,9 +16,9 @@ google.maps.event.addDomListener(window, 'load', function(){
 <ul>
   <li><b>Latitude:</b> <%= @nmea.lat %></li>
   <li><b>Longitude:</b> <%= @nmea.long %></li>
-  <li><b>Speed:</b> <%= @nmea.speed %></li>
-  <li><b>Temperature:</b> <%= @weather.temp_out %></li>
-  <li><b>Wind Avg:</b> <%= @weather.wind_avg %></li>
+  <li><b>Speed:</b> <%= @nmea.speed %> knts</li>
+  <li><b>Temperature:</b> <%= @weather.temp_out %>c</li>
+  <li><b>Wind Avg:</b> <%= @weather.wind_avg %>mph</li>
   <li><b>Wind Dir:</b> <%= @weather.wind_dir %></li>
 </ul>
 
