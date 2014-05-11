@@ -17,11 +17,15 @@
     <nav class="sidebar">
       <div class="sidebar__title">Ellipsis</div>
       <ul class="sidebar__links">
+        <li><a href="/map">Map</a></li>
+        <li><a href="/api">API</a></li>
+        <% if settings.afloat == true %>
         <li><a href="/#geodata">Geodata</a></li>
         <li><a href="/#weather">Weather</a></li>
         <li><a href="/raw_weather">Raw Weather</a></li>
         <li><a href="/messages">Messages</a></li>
         <li><a href="/library">Library</a></li>
+        <% end %>
       </ul>
     </nav>
 

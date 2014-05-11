@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'rubygems'
+require 'hex_string'
 require 'sinatra'
 require "sinatra/content_for"
 require "sinatra/json"
@@ -26,6 +27,8 @@ class App < Sinatra::Application
   end
 
   get '/?' do
+
+    redirect '/map' unless settings.afloat
 
     # These parameters come from the query string
     # TODO Validate user input
@@ -61,6 +64,9 @@ class App < Sinatra::Application
 
     @gmaps_api_key = 'AIzaSyBluOcHbET3xs4QBRfzGtA5pC9rS6my5V8'
     @json_params = ''
+
+    @nmea = Nmea.last();
+    @weather = Weather.last();
 
     erb :map
   end
@@ -154,6 +160,29 @@ class App < Sinatra::Application
   post '/messages' do
     Messages.send_message(params['message'])
     redirect '/messages'
+  end
+
+  post '/rockblock' do
+    data = params['data'].to_byte_string.split(',')
+
+    Nmea.create(
+      :lat => data[0],
+      :long => data[1],
+      :speed => data[3],
+      :bearing => data[2],
+      :created_at => Time.now()
+    )
+
+    Weather.create(
+      :temp_out => data[5],
+      :wind_avg => data[6],
+      :wind_dir => data[7],
+      :rel_pressure => data[8]
+    )
+
+    status 200
+    body ''
+
   end
 
 end

@@ -9,3 +9,25 @@ google.maps.event.addDomListener(window, 'load', function(){
 });
 </script>
 <% end %>
+
+
+<h4>Latest Information:</h4>
+
+<ul>
+  <li><b>Latitude:</b> <%= @nmea.lat %></li>
+  <li><b>Longitude:</b> <%= @nmea.long %></li>
+  <li><b>Speed:</b> <%= @nmea.speed %></li>
+  <li><b>Temperature:</b> <%= @weather.temp_out %></li>
+  <li><b>Wind Avg:</b> <%= @weather.wind_avg %></li>
+  <li><b>Wind Dir:</b> <%= @weather.wind_dir %></li>
+</ul>
+
+<hr>
+
+<h4>About this data:</h4>
+
+<p>Data is transmited from SV Ellipsis approx every 3 hours via
+  Iridium. Occasionally some data maybe missing or delayed.</p>
+
+<p>You can follow us <a href="http://twitter.com/svellipsis">@svellipsis</a> for
+  updates as we get them.</p>
