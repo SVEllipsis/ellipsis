@@ -62,7 +62,7 @@ class App < Sinatra::Application
 
     @page = {:title => 'Map'}
 
-    @gmaps_api_key = 'AIzaSyBluOcHbET3xs4QBRfzGtA5pC9rS6my5V8'
+    @gmaps_api_key = 'AIzaSyCN6TZJCABZRmN54lwwf6Mt0j7Ot6ABf74'
     @json_params = ''
 
     @nmea = Nmea.last();
