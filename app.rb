@@ -170,25 +170,42 @@ class App < Sinatra::Application
   end
 
   post '/rockblock' do
-    data = params['data'].to_byte_string.split(',')
+    data = params['data'].to_byte_string
+
+    unless data.count(',') == 7
+      status 200
+      body 'not-nmea'
+    end
+
+    metrics = data.split(',')
+
+    unless metrics[0] == '0.0'
+      lat = metrics[0]
+      long = metrics[1]
+    else
+      lat = data['iridium_latitude']
+      long = data['iridium_longitude']
+    end
 
     Nmea.create(
-      :lat => data[0],
-      :long => data[1],
-      :speed => data[3],
-      :bearing => data[2],
+      :lat => lat,
+      :long => long,
+      :speed => metrics[3],
+      :bearing => metrics[2],
       :created_at => Time.now()
     )
 
     Weather.create(
-      :temp_out => data[5],
-      :wind_avg => data[6],
-      :wind_dir => data[7],
-      :rel_pressure => data[8]
+      :temp_out => metrics[5],
+      :wind_avg => metrics[6],
+      :wind_dir => metrics[7],
+      :rel_pressure => metrics[8]
     )
 
+    #Tweet.send_nmea
+
     status 200
-    body ''
+    body 'thankyou'
 
   end
 
