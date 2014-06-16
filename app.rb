@@ -170,6 +170,7 @@ class App < Sinatra::Application
   end
 
   post '/rockblock' do
+    puts data.inspect
     data = params['data'].to_byte_string
 
     unless data.count(',') == 7
