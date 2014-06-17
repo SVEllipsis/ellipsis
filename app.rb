@@ -170,7 +170,6 @@ class App < Sinatra::Application
   end
 
   post '/rockblock' do
-    puts params.inspect
     data = params['data'].to_byte_string
 
     unless data.count(',') == 7
@@ -184,8 +183,8 @@ class App < Sinatra::Application
       lat = metrics[0]
       long = metrics[1]
     else
-      lat = data['iridium_latitude']
-      long = data['iridium_longitude']
+      lat = params['iridium_latitude']
+      long = params['iridium_longitude']
     end
 
     Nmea.create(
