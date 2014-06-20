@@ -5,7 +5,7 @@
 <script src="/js/ellipsis-map.js"></script>
 <script>
 google.maps.event.addDomListener(window, 'load', function(){
-  new ellipsisMap(document.getElementById("map-canvas"));
+  window.map = new ellipsisMap(document.getElementById("map-canvas"));
 });
 </script>
 <% end %>

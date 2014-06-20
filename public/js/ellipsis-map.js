@@ -5,11 +5,30 @@ window.ellipsisMap = (function(){
     this.getData().done($.proxy(function(json){
       this.data = json;
 
-      // TODO Guess initial center and zoom mased on data set
-      this.map = new google.maps.Map(mapElem, {
+      var options = {
         center: new google.maps.LatLng(45, 10),
         zoom: 5
-      });
+      };
+
+      if (this.data.length) {
+        var lastPoint = this.data[this.data.length - 1];
+        options.zoom = 9;
+
+        if (this.data.length >= 2) {
+          // TODO Make this a bit smarter
+          // Center the map between the last two checkins
+          var lastButOnePoint = this.data[this.data.length - 2];
+          options.center = new google.maps.LatLng(
+            this._meanValue(lastPoint.lat, lastButOnePoint.lat),
+            this._meanValue(lastPoint.long, lastButOnePoint.long)
+          );
+        }
+        else {
+          options.center = new google.maps.LatLng(lastPoint.lat, lastPoint.long);
+        }
+      }
+
+      this.map = new google.maps.Map(mapElem, options);
 
       this.addMarkers();
       this.addLine();
@@ -109,6 +128,14 @@ window.ellipsisMap = (function(){
 
     _zeroPad: function(number) {
       return (number < 10 ? '0' + number : number);
+    },
+
+    _meanValue: function(n1, n2) {
+      var sum = 0;
+      for (var i=0; i < arguments.length; i++) {
+        sum += arguments[i];
+      }
+      return sum / arguments.length;
     }
   };
 
