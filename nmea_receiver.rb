@@ -13,4 +13,24 @@ puts response.body if response.is_a?(Net::HTTPSuccess)
 
 data = response.body.split("|")
 
-Nmea.parse(data)
+def self.clean(val)
+  return nil unless val.match("[0-9].")
+  return nil if val.empty?
+  val
+end
+
+values = Array.new
+
+values << clean(data[0])
+values << clean(data[1])
+values << clean(data[6])
+values << clean(data[4])
+values << clean(data[8])
+values << ''
+values << ''
+values << ''
+values << ''
+
+message = values.join(',')
+
+REDIS.publish("mo", msg)

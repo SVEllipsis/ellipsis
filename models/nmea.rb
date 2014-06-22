@@ -40,7 +40,7 @@ class Nmea
   end
 
   def self.parse(data)
-    puts self.create(
+    self.create(
       :lat => clean(data[0]),
       :long => clean(data[1]),
       :speed => clean(data[4]),
@@ -50,7 +50,7 @@ class Nmea
       :waterspeed => clean(data[7]),
       :watertemp => clean(data[6]),
       :created_at => Time.now()
-    ).inspect
+    )
   end
 
 
