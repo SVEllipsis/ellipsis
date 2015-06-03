@@ -143,6 +143,7 @@ class App < Sinatra::Application
     Nmea.create(
       :lat => lat,
       :long => long,
+      :journey_id => 2,
       :speed => metrics[3],
       :bearing => metrics[2],
       :created_at => Time.now()
