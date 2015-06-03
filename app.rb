@@ -10,7 +10,6 @@ require './lib/sinatra-reloader'
 
 
 class App < Sinatra::Application
-  set :afloat, !!ENV['AFLOAT'] || false
 
   helpers Sinatra::ContentFor
 
@@ -27,38 +26,10 @@ class App < Sinatra::Application
   end
 
   get '/?' do
-
-    redirect '/map' unless settings.afloat
-
-    # These parameters come from the query string
-    # TODO Validate user input
-
-    params[:resolution] = params[:resolution].to_i || 60
-    params[:limit] = params[:limit].to_i || 10
-
-
-    @page = {:title => 'Dashboard'}
-
-    @data = get_data({
-      :resolution => params[:resolution],
-      :limit => params[:limit],
-    })
-
-    @limit = params[:limit]
-    @resolution = params[:resolution]
-    @refreshed_at = DateTime.now
-
-    @partials = [
-      :'dashboard/geodata',
-      :'dashboard/weather',
-    ]
-
-    erb :dashboard
+    redirect '/map'
   end
 
   get '/map' do
-    # Disable if on boat
-    return pass if settings.afloat
 
     @page = {:title => 'Map'}
 
@@ -149,24 +120,6 @@ class App < Sinatra::Application
     parameters[:offset] = (opts[:page] -1) * opts[:limit] if opts[:page] > 1 && opts[:limit] != 0
 
     Nmea.all(parameters)
-  end
-
-  # Messaging
-  get '/messages' do
-
-    @page = {:title => 'Messages'}
-
-    @messages = Messages.all(
-      :order => [ :created_at.desc ],
-      :limit => 50
-    )
-
-    erb :messages
-  end
-
-  post '/messages' do
-    Messages.send_message(params['message'])
-    redirect '/messages'
   end
 
   post '/rockblock' do

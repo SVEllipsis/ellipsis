@@ -10,6 +10,7 @@ class Nmea
   property :windspeed, Float
   property :waterspeed, Float
   property :watertemp, Float
+  property :journey_id, Integer
   property :created_at, DateTime
 
   def lat_as_str
