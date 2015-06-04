@@ -35,9 +35,9 @@ class App < Sinatra::Application
 
     @gmaps_api_key = 'AIzaSyCutm8yU9R_oPItTgnNq1GtuP-3tX7h91M'
     @json_params = ''
+    @current_voyage = 1
 
     @nmea = Nmea.last();
-    @weather = Weather.last();
 
     erb :map
   end

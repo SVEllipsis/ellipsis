@@ -4,22 +4,26 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=<%=@gmaps_api_key%>&amp;sensor=false"></script>
 <script src="/js/ellipsis-map.js"></script>
 <script>
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+window.initialVoyageId = getParameterByName('voyage') || <%=@current_voyage%>;
+
 google.maps.event.addDomListener(window, 'load', function(){
-  window.map = new ellipsisMap(document.getElementById("map-canvas"));
+  window.map = new ellipsisMap(document.getElementById("map-canvas"), window.initialVoyageId);
 });
 </script>
 <% end %>
-
 
 <h4>Latest Information:</h4>
 
 <ul>
   <li><b>Latitude:</b> <%= @nmea.lat_as_str %></li>
   <li><b>Longitude:</b> <%= @nmea.long_as_str %></li>
-  <li><b>Speed:</b> <%= @nmea.speed %> knts</li>
-  <li><b>Temperature:</b> <%= @weather.temp_out %>c</li>
-  <li><b>Wind Avg:</b> <%= @weather.wind_avg %>mph</li>
-  <li><b>Wind Dir:</b> <%= @weather.wind_dir %></li>
 </ul>
 
 <hr>

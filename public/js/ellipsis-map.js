@@ -1,9 +1,11 @@
 window.ellipsisMap = (function(){
   "use strict";
 
-  var ellipsisMap = function(mapElem) {
-    this.getData().done($.proxy(function(json){
-      this.data = json;
+  var ellipsisMap = function(mapElem, journeyId) {
+    this.currentJourneyId = journeyId;
+
+    this.getData(this.currentJourneyId).done($.proxy(function(json){
+      this.data = json.data;
 
       var options = {
         center: new google.maps.LatLng(45, 10),
@@ -36,8 +38,13 @@ window.ellipsisMap = (function(){
   };
 
   ellipsisMap.prototype = {
-    getData: function() {
-      return $.ajax('/map.json');
+    getData: function(journeyId) {
+      return $.ajax('/data.json', {
+        data: {
+          order: 'id:asc',
+          journey_id: journeyId,
+        }
+      });
     },
 
     addMarkers: function() {
