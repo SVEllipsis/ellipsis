@@ -59,7 +59,7 @@ class App < Sinatra::Application
     # These parameters come from the query string
     params[:start_time] ||= nil
     params[:end_time] ||= nil
-    params[:journey_id] = params[:journey_id].to_i || nil
+    params[:journey_id] = params[:journey_id] || nil
     params[:fields] ||= nil
     params[:resolution] = params[:resolution].to_i || 60
     params[:limit] = params[:limit].to_i || 10
@@ -81,7 +81,7 @@ class App < Sinatra::Application
     data = get_data({
       :start => (params[:start_time] ? DateTime.parse(params[:start_time]) : nil),
       :end =>  (params[:end_time] ? DateTime.parse(params[:end_time]) : nil),
-      :journey_id => params[:journey_id],
+      :journey_id => (params[:journey_id].to_i ? params[:journey_id] : nil),
       :fields => fields,
       :limit => params[:limit],
       :page => params[:page],
