@@ -64,7 +64,7 @@ class App < Sinatra::Application
     params[:resolution] = params[:resolution].to_i || 60
     params[:limit] = params[:limit].to_i || 10
     params[:page] = params[:page].to_i || 1
-    params[:order] = params[:order] || 'id.desc'
+    params[:order] = params[:order] || 'id:desc'
 
 
     # params.order is an string that looks like: id:desc,created_at:asc
@@ -72,7 +72,7 @@ class App < Sinatra::Application
     # TODO Validate the correct naming for these things
     order = params[:order].split(',').map do |order_tuple|
       pair = order_tuple.split(':')
-      [ pair[0].to_sym[pair[1].to_sym] ]
+      pair[0].to_sym.send(pair[1].to_sym)
     end
 
 
