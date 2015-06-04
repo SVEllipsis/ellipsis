@@ -43,6 +43,8 @@ class App < Sinatra::Application
   end
 
   get '/map.json' do
+    # Allow CORS requests from any host
+    response['Access-Control-Allow-Origin'] = '*'
     #Might want to cache this at some point
     pings = Nmea.all(:order => [:id.asc])
     content_type :json
@@ -51,6 +53,9 @@ class App < Sinatra::Application
 
   # Hot pants! It's named capture groups in regexp
   get %r{^/data(?:\.(?<format>json))?$} do
+    # Allow CORS requests from any host
+    response['Access-Control-Allow-Origin'] = '*'
+
     # These parameters come from the query string
     params[:start] ||= nil
     params[:end] ||= nil
