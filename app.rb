@@ -135,7 +135,7 @@ class App < Sinatra::Application
     parameters[:fields] = opts[:fields] if opts[:fields]
     parameters[:created_at.gt] = opts[:start_time] if opts[:start_time]
     parameters[:created_at.lt] = opts[:end_time] if opts[:end_time]
-    parameters[:journey_id.eq] = opts[:journey_id] if opts[:journey_id]
+    parameters[:journey_id.eql] = opts[:journey_id] if opts[:journey_id]
     parameters[:limit] = opts[:limit] if opts[:limit] != 0
     parameters[:offset] = (opts[:page] -1) * opts[:limit] if opts[:page] > 1 && opts[:limit] != 0
     parameters[:order] = opts[:order] if opts[:order]
