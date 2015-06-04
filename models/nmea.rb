@@ -4,12 +4,6 @@ class Nmea
   property :id, Serial
   property :lat, Float
   property :long, Float
-  property :speed, Float
-  property :bearing, Float
-  property :winddir, Float
-  property :windspeed, Float
-  property :waterspeed, Float
-  property :watertemp, Float
   property :journey_id, Integer
   property :created_at, DateTime
 
@@ -32,24 +26,10 @@ class Nmea
     fl.to_s.match /(?<degrees>\d{0,3})\.(?<minutes>\d\d)(?<seconds>\d{0,3})/
   end
 
-  def self.set(key, value)
-    REDIS.hset 'nmea', key, value
-  end
-
-  def self.get(key)
-    REDIS.hget 'nmea', key
-  end
-
   def self.parse(data)
     self.create(
       :lat => clean(data[0]),
       :long => clean(data[1]),
-      :speed => clean(data[4]),
-      :bearing => clean(data[5]),
-      :winddir => clean(data[8]),
-      :windspeed => clean(data[9]),
-      :waterspeed => clean(data[7]),
-      :watertemp => clean(data[6]),
       :created_at => Time.now()
     )
   end

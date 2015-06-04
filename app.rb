@@ -57,21 +57,35 @@ class App < Sinatra::Application
     response['Access-Control-Allow-Origin'] = '*'
 
     # These parameters come from the query string
-    params[:start] ||= nil
-    params[:end] ||= nil
+    params[:start_time] ||= nil
+    params[:end_time] ||= nil
+    params[:journey_id] = params[:journey_id].to_i || nil
     params[:fields] ||= nil
     params[:resolution] = params[:resolution].to_i || 60
     params[:limit] = params[:limit].to_i || 10
     params[:page] = params[:page].to_i || 1
+    params[:order] = params[:order] || 'id.desc'
+
+
+    # params.order is an string that looks like: id:desc,created_at:asc
+    # which should translate to params[:order] = [:id.desc, created_at.asc]
+    # TODO Validate the correct naming for these things
+    order = params[:order].split(',').map do |order_tuple|
+      pair = order_tuple.split(':')
+      [ pair[0].to_sym[pair[1].to_sym] ]
+    end
+
 
     fields = (params[:fields] ? params[:fields].split(',') : nil)
 
     data = get_data({
-      :start => (params[:start] ? DateTime.parse(params[:start]) : nil),
-      :end =>  (params[:end] ? DateTime.parse(params[:end]) : nil),
+      :start => (params[:start_time] ? DateTime.parse(params[:start_time]) : nil),
+      :end =>  (params[:end_time] ? DateTime.parse(params[:end_time]) : nil),
+      :journey_id => params[:journey_id],
       :fields => fields,
       :limit => params[:limit],
       :page => params[:page],
+      :order => order,
     })
 
     # Datamapper fields are lazy loaded so they end up being populated anyway if
@@ -106,23 +120,25 @@ class App < Sinatra::Application
     # http://stackoverflow.com/questions/10403039/mysql-select-query-5-minute-increment
 
     opts = {
-      :start => nil,
-      :end => nil,
+      :start_time => nil,
+      :end_time => nil,
+      :journey_id => nil,
       :fields => nil,
       :resolution => nil,
       :limit => 0,
       :page => 1,
+      :order => [ :created_at.desc ]
     }.merge(opts)
 
-    parameters ={
-      :order => [ :created_at.desc ]
-    }
+    parameters = {}
 
     parameters[:fields] = opts[:fields] if opts[:fields]
-    parameters[:created_at.gt] = opts[:start] if opts[:start]
-    parameters[:created_at.lt] = opts[:end] if opts[:end]
+    parameters[:created_at.gt] = opts[:start_time] if opts[:start_time]
+    parameters[:created_at.lt] = opts[:end_time] if opts[:end_time]
+    parameters[:journey_id.eq] = opts[:journey_id] if opts[:journey_id]
     parameters[:limit] = opts[:limit] if opts[:limit] != 0
     parameters[:offset] = (opts[:page] -1) * opts[:limit] if opts[:page] > 1 && opts[:limit] != 0
+    parameters[:order] = opts[:order] if opts[:order]
 
     Nmea.all(parameters)
   end
@@ -149,16 +165,7 @@ class App < Sinatra::Application
       :lat => lat,
       :long => long,
       :journey_id => 2,
-      :speed => metrics[3],
-      :bearing => metrics[2],
       :created_at => Time.now()
-    )
-
-    Weather.create(
-      :temp_out => metrics[5],
-      :wind_avg => metrics[6],
-      :wind_dir => metrics[7],
-      :rel_pressure => metrics[8]
     )
 
     #Tweet.send_nmea
