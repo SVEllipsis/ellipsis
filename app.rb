@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'hex_string'
+require 'httparty'
 require 'sinatra'
 require "sinatra/content_for"
 require "sinatra/json"
@@ -159,12 +160,18 @@ class App < Sinatra::Application
       :created_at => Time.now()
     )
 
-    #Tweet.send_nmea
+    url = URI.escape "https://zapier.com/hooks/catch/bsuyg7/message?site=#{metrics[2]}"
 
-    puts data.inspect
+    HTTParty.get(url) if metrics[2] !== ''
 
     status 200
     body 'thankyou'
+
+  end
+
+  post '/send_to_boat' do
+
+  end
 
   end
 
