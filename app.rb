@@ -175,6 +175,4 @@ class App < Sinatra::Application
 
   end
 
-  end
-
 end
