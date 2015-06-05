@@ -162,7 +162,7 @@ class App < Sinatra::Application
       :created_at => Time.now()
     )
 
-    url = URI.escape "https://zapier.com/hooks/catch/bsuyg7/message?site=#{metrics[2]}"
+    url = URI.escape "https://zapier.com/hooks/catch/bsuyg7?message=#{metrics[2]}"
 
     if metrics[2] != ''
       puts 'posting to twitter'
