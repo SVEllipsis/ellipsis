@@ -176,7 +176,7 @@ class App < Sinatra::Application
   end
 
   post '/send_to_boat' do
-    puts params.['text'].inspect
+    puts params['text'].inspect
   end
 
 end
