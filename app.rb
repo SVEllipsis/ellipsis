@@ -137,7 +137,7 @@ class App < Sinatra::Application
   post '/rockblock' do
     data = params['data'].to_byte_string
 
-    unless data.count(',') == 7
+    unless data.count(',') == 2
       status 200
       body 'not-nmea'
     end
@@ -160,6 +160,8 @@ class App < Sinatra::Application
     )
 
     #Tweet.send_nmea
+
+    puts data.inspect
 
     status 200
     body 'thankyou'
