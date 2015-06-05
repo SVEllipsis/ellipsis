@@ -162,7 +162,9 @@ class App < Sinatra::Application
 
     url = URI.escape "https://zapier.com/hooks/catch/bsuyg7/message?site=#{metrics[2]}"
 
-    HTTParty.get(url) if metrics[2] != ''
+    if metrics[2] != ''
+      HTTParty.get(url)
+    end
 
     status 200
     body 'thankyou'
