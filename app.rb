@@ -166,7 +166,8 @@ class App < Sinatra::Application
 
     if metrics[2] != ''
       puts 'posting to twitter'
-      HTTParty.get(url)
+      response = HTTParty.get(url)
+      puts response.body, response.code, response.message, response.headers.inspect
     end
 
     status 200
