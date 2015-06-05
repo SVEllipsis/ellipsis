@@ -145,6 +145,8 @@ class App < Sinatra::Application
 
     metrics = data.split(',')
 
+    puts metrics.inspect
+
     unless metrics[0] == '0.0'
       lat = metrics[0]
       long = metrics[1]
@@ -163,6 +165,7 @@ class App < Sinatra::Application
     url = URI.escape "https://zapier.com/hooks/catch/bsuyg7/message?site=#{metrics[2]}"
 
     if metrics[2] != ''
+      puts 'posting to twitter'
       HTTParty.get(url)
     end
 
